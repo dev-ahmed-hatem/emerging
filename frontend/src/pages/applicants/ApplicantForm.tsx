@@ -97,7 +97,7 @@ const ApplicantForm = ({
         scrollToFirstError={{ behavior: "smooth", block: "center" }}
         initialValues={{
           ...initialValues,
-          birthdate: dayjs(initialValues?.birth_date) ?? null,
+          birthdate: dayjs(initialValues?.birthdate) ?? null,
         }}
       >
         {/* Personal Info  */}

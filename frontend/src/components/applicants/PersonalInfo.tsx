@@ -17,7 +17,7 @@ const PersonalInfo = ({ applicant }: { applicant: Applicant }) => {
       </Descriptions.Item>
 
       <Descriptions.Item label="تاريخ الميلاد">
-        {applicant.birth_date}
+        {applicant.birthdate}
       </Descriptions.Item>
 
       <Descriptions.Item label="الجنس">{applicant.gender}</Descriptions.Item>
@@ -35,7 +35,7 @@ const PersonalInfo = ({ applicant }: { applicant: Applicant }) => {
       </Descriptions.Item>
 
       <Descriptions.Item label="رقم الجوال">
-        {applicant.phone_number}
+        {applicant.phone}
       </Descriptions.Item>
 
       <Descriptions.Item label="البريد الإلكتروني">

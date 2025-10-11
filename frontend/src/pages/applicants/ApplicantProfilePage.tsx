@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Card, Avatar, Tabs, Button, Switch, Progress, Tag } from "antd";
+import { useEffect, useState } from "react";
+import { Card, Avatar, Tabs, Button, Progress, Tag, Popconfirm } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -9,6 +9,15 @@ import {
 import { TabsProps } from "antd/lib";
 import PersonalInfo from "@/components/applicants/PersonalInfo";
 import ApplicantNotes from "@/components/applicants/ApplicantNotes";
+import { useNavigate, useParams } from "react-router";
+import { useNotification } from "@/providers/NotificationProvider";
+import {
+  useApplicantMutation,
+  useGetApplicantQuery,
+} from "@/app/api/endpoints/applicants";
+import ErrorPage from "../Error";
+import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
+import Loading from "@/components/Loading";
 
 const levels = [
   { name: "المستوى الأول", color: "#a5d8ff" },
@@ -19,35 +28,27 @@ const levels = [
 ];
 
 const ApplicantProfilePage: React.FC = () => {
-  // --- Static placeholder applicant data
-  const applicant = {
-    id: 1,
-    applicant_number: "A-0231",
-    name: "أحمد علي محمد القحطاني",
-    national_id: "1029384756",
-    grade: "الثالث المتوسط",
-    birth_date: "2009-06-15",
-    gender: "ذكر",
-    nationality: "سعودي",
-    region: "منطقة الرياض",
-    city: "الرياض",
-    residence: "حي النزهة - شارع الملك عبدالعزيز",
-    phone_number: "0501234567",
-    email: "ahmad.q@gmail.com",
-    entity_type: "مدارس تحفيظ القرآن الكريم",
-    entity_name: "مدرسة الإمام الشاطبي لتحفيظ القرآن الكريم",
-    guardian_name: "علي محمد القحطاني",
-    guardian_relation: "والد",
-    guardian_phone: "0559876543",
-    rank: "متسابق",
-    seniority: "سنة واحدة",
-    is_active: true,
-    created_at: "2025-10-09",
-    created_by: "المشرف العام",
-  } as const;
-
-  const [isActive, setIsActive] = useState(applicant.is_active);
   const [currentLevel, setCurrentLevel] = useState(2);
+  const navigate = useNavigate();
+  const notification = useNotification();
+  const { applicant_id } = useParams();
+
+  const {
+    data: applicant,
+    isFetching,
+    isError,
+    error: applicantError,
+  } = useGetApplicantQuery({ id: applicant_id as string });
+
+  const [
+    deleteApplicant,
+    {
+      isError: deleteIsError,
+      error: deleteError,
+      isLoading: deleting,
+      isSuccess: deleted,
+    },
+  ] = useApplicantMutation();
 
   const promote = () => {
     if (currentLevel < levels.length - 1) {
@@ -61,18 +62,57 @@ const ApplicantProfilePage: React.FC = () => {
     }
   };
 
+  const handleDelete = () => {
+    deleteApplicant({
+      url: `/applicants/applicants/${applicant_id}/`,
+      method: "DELETE",
+      data: {},
+    });
+  };
+
   const items: TabsProps["items"] = [
     {
       label: "المعلومات الشخصية",
       key: "1",
-      children: <PersonalInfo applicant={applicant} />,
+      children: <PersonalInfo applicant={applicant!} />,
     },
     {
       label: "ملاحظات",
       key: "3",
-      children: <ApplicantNotes applicant={applicant} />,
+      children: <ApplicantNotes notes={applicant?.notes} />,
     },
   ];
+
+  useEffect(() => {
+    if (deleteIsError) {
+      let message = (deleteError as axiosBaseQueryError)?.data.detail ?? null;
+      notification.error({
+        message: message ?? "حدث خطأ أثناء حذف المتسابق ! برجاء إعادة المحاولة",
+      });
+    }
+  }, [deleteIsError]);
+
+  useEffect(() => {
+    if (deleted) {
+      notification.success({
+        message: "تم حذف المتسابق بنجاح",
+      });
+
+      navigate("/applicants");
+    }
+  }, [deleted]);
+
+  if (isFetching) return <Loading />;
+  if (isError) {
+    const error_title =
+      (applicantError as axiosBaseQueryError).status === 404
+        ? "متسابق غير موجود! تأكد من كود المتسابق المدخل."
+        : undefined;
+
+    return (
+      <ErrorPage subtitle={error_title} reload={error_title === undefined} />
+    );
+  }
 
   return (
     <div>
@@ -88,26 +128,18 @@ const ApplicantProfilePage: React.FC = () => {
               size={80}
               className="bg-white text-[#007F7F] font-bold border-4 border-white shadow-lg"
             >
-              {applicant.applicant_number}
+              {applicant?.id}
             </Avatar>
 
             <div>
               <h2 className="text-xl font-extrabold drop-shadow-sm">
-                {applicant.rank} / {applicant.name}
+                {applicant?.name}
               </h2>
-              <p className="text-white/90">{applicant.seniority}</p>
+              <p className="text-white/90">
+                {applicant?.entity_type} / {applicant?.entity_name}
+              </p>
             </div>
           </div>
-
-          {/* Status (optional) */}
-          {/* <div className="flex items-center gap-2">
-      <Switch
-        checked={isActive}
-        onChange={() => setIsActive(!isActive)}
-        checkedChildren="نشط"
-        unCheckedChildren="موقوف"
-      />
-    </div> */}
         </div>
       </Card>
 
@@ -173,22 +205,40 @@ const ApplicantProfilePage: React.FC = () => {
         <div className="flex gap-1 flex-col text-sm">
           <div>
             <span className="font-medium text-gray-700">تاريخ الإضافة: </span>
-            {applicant.created_at}
+            {applicant?.created_at}
           </div>
           <div>
             <span className="font-medium text-gray-700">بواسطة: </span>
-            {applicant.created_by}
+            {applicant?.created_by}
           </div>
         </div>
 
         <div className="btn-wrapper flex md:justify-end mt-4 flex-wrap gap-4">
-          <Button type="primary" icon={<EditOutlined />}>
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => {
+              navigate(`/applicants/edit/${applicant_id}`);
+            }}
+          >
             تعديل البيانات
           </Button>
 
-          <Button danger icon={<DeleteOutlined />}>
-            حذف المتسابق
-          </Button>
+          <Popconfirm
+            title="هل أنت متأكد من حذف هذا المتسابق؟"
+            onConfirm={handleDelete}
+            okText="نعم"
+            cancelText="لا"
+          >
+            <Button
+              className="enabled:bg-red-500 enabled:border-red-500 enabled:shadow-[0_2px_0_rgba(0,58,58,0.31)]
+            enabled:hover:border-red-400 enabled:hover:bg-red-400 enabled:text-white"
+              icon={<DeleteOutlined />}
+              loading={deleting}
+            >
+              حذف المتسابق
+            </Button>
+          </Popconfirm>
         </div>
       </div>
     </div>

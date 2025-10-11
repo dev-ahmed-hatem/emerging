@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import RegexValidator, EmailValidator
 from django.utils.translation import gettext_lazy as _
 
+from users.models import User
+
 
 class Applicant(models.Model):
     name = models.CharField(
@@ -130,10 +132,17 @@ class Applicant(models.Model):
     created_at = models.DateTimeField(_("تاريخ الإدخال"), auto_now_add=True)
     updated_at = models.DateTimeField(_("تاريخ التعديل"), auto_now=True)
 
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name=_("تم الإنشاء بواسطة")
+    )
+
     class Meta:
         verbose_name = _("متسابق")
         verbose_name_plural = _("المتسابقون")
         ordering = ["-created_at"]
 
     def __str__(self):
-        return self.full_name
+        return self.name

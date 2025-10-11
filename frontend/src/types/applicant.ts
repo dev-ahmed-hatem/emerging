@@ -80,7 +80,7 @@ export type Applicant = {
   name: string;
   national_id: string;
   grade: string;
-  birth_date: string;
+  birthdate: string;
   gender: "ذكر" | "أنثى";
   nationality: "سعودي" | "غير سعودي";
   region: keyof typeof regions;
@@ -89,9 +89,12 @@ export type Applicant = {
   phone: string;
   email?: string;
   guardian_name: string;
-  relation: string;
+  guardian_relation: string;
   guardian_phone: string;
   entity_type: string;
   entity_name: string;
   notes?: string;
+
+  created_by?: string;
+  created_at: string;
 };

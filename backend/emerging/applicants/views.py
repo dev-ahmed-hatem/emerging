@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from .serializers import ApplicantWriteSerializer, ApplicantListSerializer
+from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer
 from .models import Applicant
 
 
@@ -9,4 +9,4 @@ class ApplicantViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
             return ApplicantWriteSerializer
-        return ApplicantListSerializer
+        return ApplicantReadSerializer
