@@ -1,6 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer, LevelSerializer
 from .models import Applicant, Level
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class LevelViewSet(ModelViewSet):
@@ -47,3 +50,54 @@ class ApplicantViewSet(ModelViewSet):
             queryset = queryset.order_by(f"{order}{sort_by}")
 
         return queryset
+
+    @action(detail=True, methods=['get'])
+    def promote(self, request, pk=None):
+        try:
+            applicant = Applicant.objects.get(pk=pk)
+        except Applicant.DoesNotExist:
+            return Response({"error": "المتسابق غير موجود"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get all levels ordered by weight
+        levels = list(Level.objects.order_by("weight"))
+        current_index = next((i for i, lvl in enumerate(levels) if lvl == applicant.level), None)
+
+        # Handle edge cases
+        if current_index is None:
+            return Response({"error": "المستوى الحالي غير معروف"}, status=status.HTTP_400_BAD_REQUEST)
+        if current_index == len(levels) - 1:
+            return Response({"message": "المتسابق في أعلى مستوى بالفعل"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Promote to the next level
+        applicant.level = levels[current_index + 1]
+        applicant.save()
+
+        return Response({
+            "message": f"تم ترقية المتسابق إلى {applicant.level.name}",
+            "new_level": LevelSerializer(applicant.level, context={'request': request}).data
+        }, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'])
+    def demote(self, request, pk=None):
+        try:
+            applicant = Applicant.objects.get(pk=pk)
+        except Applicant.DoesNotExist:
+            return Response({"error": "المتسابق غير موجود"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Get all levels ordered by weight
+        levels = list(Level.objects.order_by("weight"))
+        current_index = next((i for i, lvl in enumerate(levels) if lvl == applicant.level), None)
+
+        if current_index is None:
+            return Response({"error": "المستوى الحالي غير معروف"}, status=status.HTTP_400_BAD_REQUEST)
+        if current_index == 0:
+            return Response({"message": "المتسابق في أدنى مستوى بالفعل"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Demote to the previous level
+        applicant.level = levels[current_index - 1]
+        applicant.save()
+
+        return Response({
+            "message": f"تم إنزال المتسابق إلى {applicant.level.name}",
+            "new_level": LevelSerializer(applicant.level, context={'request': request}).data
+        }, status=status.HTTP_200_OK)

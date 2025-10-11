@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Card, Avatar, Tabs, Button, Progress, Tag, Popconfirm } from "antd";
 import {
   EditOutlined,
@@ -12,26 +12,32 @@ import ApplicantNotes from "@/components/applicants/ApplicantNotes";
 import { useNavigate, useParams } from "react-router";
 import { useNotification } from "@/providers/NotificationProvider";
 import {
+  applicantsEndpoints,
   useApplicantMutation,
+  useChangeLevelMutation,
   useGetApplicantQuery,
 } from "@/app/api/endpoints/applicants";
 import ErrorPage from "../Error";
 import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import Loading from "@/components/Loading";
-
-const levels = [
-  { name: "المستوى الأول", color: "#a5d8ff" },
-  { name: "المستوى الثاني", color: "#74c0fc" },
-  { name: "المستوى الثالث", color: "#4dabf7" },
-  { name: "المستوى الرابع", color: "#1c7ed6" },
-  { name: "المستوى الخامس", color: "#1864ab" },
-];
+import { useGetLevelsQuery } from "@/app/api/endpoints/levels";
+import { generateBluePalette } from "@/types/level";
+import { Applicant } from "@/types/applicant";
+import { useAppDispatch } from "@/app/redux/hooks";
 
 const ApplicantProfilePage: React.FC = () => {
-  const [currentLevel, setCurrentLevel] = useState(2);
   const navigate = useNavigate();
   const notification = useNotification();
+  const dispatch = useAppDispatch();
   const { applicant_id } = useParams();
+
+  const {
+    data: levels,
+    isLoading: loadingLevels,
+    isError: levelsError,
+  } = useGetLevelsQuery();
+
+  const levelColors = generateBluePalette(levels?.length ?? 5);
 
   const {
     data: applicant,
@@ -39,6 +45,11 @@ const ApplicantProfilePage: React.FC = () => {
     isError,
     error: applicantError,
   } = useGetApplicantQuery({ id: applicant_id as string });
+
+  const [
+    changeLevel,
+    { data: levelRes, isLoading: changing, isError: changingError },
+  ] = useChangeLevelMutation();
 
   const [
     deleteApplicant,
@@ -51,15 +62,11 @@ const ApplicantProfilePage: React.FC = () => {
   ] = useApplicantMutation();
 
   const promote = () => {
-    if (currentLevel < levels.length - 1) {
-      setCurrentLevel((lvl) => lvl + 1);
-    }
+    changeLevel({ id: applicant_id as string, action: "promote" });
   };
 
   const demote = () => {
-    if (currentLevel > 0) {
-      setCurrentLevel((lvl) => lvl - 1);
-    }
+    changeLevel({ id: applicant_id as string, action: "demote" });
   };
 
   const handleDelete = () => {
@@ -84,6 +91,28 @@ const ApplicantProfilePage: React.FC = () => {
   ];
 
   useEffect(() => {
+    if (levelRes) {
+      dispatch(
+        applicantsEndpoints.util.updateQueryData(
+          "getApplicant",
+          { id: applicant_id as string },
+          (draft: Applicant) => {
+            draft.level = levelRes.new_level;
+          }
+        )
+      );
+    }
+  }, [levelRes]);
+
+  useEffect(() => {
+    if (changingError) {
+      notification.error({
+        message: "حدث خطأ أثناء تغيير المستوى ! برجاء إعادة المحاولة",
+      });
+    }
+  }, [changingError]);
+
+  useEffect(() => {
     if (deleteIsError) {
       let message = (deleteError as axiosBaseQueryError)?.data.detail ?? null;
       notification.error({
@@ -102,8 +131,8 @@ const ApplicantProfilePage: React.FC = () => {
     }
   }, [deleted]);
 
-  if (isFetching) return <Loading />;
-  if (isError) {
+  if (isFetching || loadingLevels) return <Loading />;
+  if (isError || levelsError) {
     const error_title =
       (applicantError as axiosBaseQueryError).status === 404
         ? "متسابق غير موجود! تأكد من كود المتسابق المدخل."
@@ -151,20 +180,20 @@ const ApplicantProfilePage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center gap-3 w-full sm:w-1/2">
             <Tag
-              color={levels[currentLevel].color}
+              color={levelColors[applicant!.level.weight - 1]}
               className="px-4 py-2 text-lg font-semibold rounded-full"
             >
-              {levels[currentLevel].name}
+              {applicant?.level.name}
             </Tag>
 
             <Progress
-              percent={((currentLevel + 1) / levels.length) * 100}
-              strokeColor={levels[currentLevel].color}
+              percent={(applicant!.level.weight / levels!.length) * 100}
+              strokeColor={levelColors[applicant!.level.weight]}
               className="w-full"
             />
 
             <p className="text-sm text-gray-500">
-              {currentLevel + 1} من {levels.length} مستويات
+              {applicant?.level.weight} من {levels?.length} مستويات
             </p>
           </div>
 
@@ -173,8 +202,9 @@ const ApplicantProfilePage: React.FC = () => {
               type="primary"
               icon={<ArrowUpOutlined />}
               onClick={promote}
-              disabled={currentLevel >= levels.length - 1}
+              disabled={applicant!.level.weight >= levels!.length}
               className="bg-gradient-to-r from-blue-600 to-blue-400 border-none hover:opacity-90"
+              loading={changing}
             >
               ترقية المتسابق
             </Button>
@@ -182,7 +212,8 @@ const ApplicantProfilePage: React.FC = () => {
               danger
               icon={<ArrowDownOutlined />}
               onClick={demote}
-              disabled={currentLevel <= 0}
+              disabled={applicant!.level.weight <= 1}
+              loading={changing}
             >
               خفض المستوى
             </Button>

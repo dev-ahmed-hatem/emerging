@@ -3,6 +3,7 @@ import { PaginatedResponse } from "@/types/paginatedResponse";
 import qs from "query-string";
 import { QueryParams } from "@/types/query_param";
 import { Applicant } from "@/types/applicant";
+import { Level } from "@/types/level";
 
 export const applicantsEndpoints = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -58,13 +59,16 @@ export const applicantsEndpoints = api.injectEndpoints({
         }
       },
     }),
-    // switchClientActive: builder.mutation<{ is_active: boolean }, string>({
-    //   query: (id) => ({
-    //     url: `/clients/clients/${id}/switch_active/`,
-    //     method: "POST",
-    //   }),
-    //   invalidatesTags: [{ type: "Client", id: "LIST" }],
-    // }),
+    changeLevel: builder.mutation<
+      { message: string; new_level: Level },
+      { id: string; action: "promote" | "demote" }
+    >({
+      query: ({ id, action }) => ({
+        url: `/applicants/applicants/${id}/${action}/`,
+        method: "GET",
+      }),
+      invalidatesTags: [{ type: "Applicant", id: "LIST" }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -73,4 +77,5 @@ export const {
   useGetApplicantsQuery,
   useGetApplicantQuery,
   useApplicantMutation,
+  useChangeLevelMutation,
 } = applicantsEndpoints;
