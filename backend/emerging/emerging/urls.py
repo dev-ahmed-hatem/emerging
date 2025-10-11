@@ -8,9 +8,7 @@ urlpatterns = [
     path('api/', include([
         path('auth/', include('authentication.urls')),
         path('users/', include('users.urls')),
-        # path('clients/', include('clients.urls')),
-        # path('financials/', include('financials.urls')),
-        # path('projects/', include('projects.urls')),
+        path('applicants/', include('applicants.urls')),
     ])),
 ]
 

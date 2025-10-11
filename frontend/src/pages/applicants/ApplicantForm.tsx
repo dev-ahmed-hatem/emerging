@@ -1,84 +1,14 @@
+import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
+import { useApplicantMutation } from "@/app/api/endpoints/applicants";
+import { useNotification } from "@/providers/NotificationProvider";
+import { Applicant, regions } from "@/types/applicant";
+import { handleServerErrors } from "@/utils/handleForm";
 import { Form, Input, Select, DatePicker, Button, Row, Col, Card } from "antd";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import dayjs from "dayjs";
 
 const { Option } = Select;
-
-const regions = {
-  "منطقة الرياض": [
-    "الرياض",
-    "الدرعية",
-    "الخرج",
-    "الدوادمي",
-    "المجمعة",
-    "القويعية",
-    "الأفلاج",
-    "وادي الدواسر",
-    "الزلفي",
-    "شقراء",
-    "حوطة بني تميم",
-    "عفيف",
-  ],
-  "منطقة مكة المكرمة": [
-    "مكة المكرمة",
-    "جدة",
-    "الطائف",
-    "القنفذة",
-    "الليث",
-    "رابغ",
-    "خليص",
-    "الخرمة",
-    "رنية",
-    "تربة",
-  ],
-  "منطقة المدينة المنورة": [
-    "المدينة المنورة",
-    "ينبع",
-    "العلا",
-    "المهد",
-    "الحناكية",
-    "بدر",
-    "خيبر",
-    "العيص",
-  ],
-  "منطقة القصيم": [
-    "بريدة",
-    "عنيزة",
-    "الرس",
-    "المذنب",
-    "البكيرية",
-    "البدائع",
-    "الأسياح",
-    "رياض الخبراء",
-  ],
-  "المنطقة الشرقية": [
-    "الدمام",
-    "الأحساء (الهفوف والمبرز)",
-    "الخبر",
-    "الظهران",
-    "حفر الباطن",
-    "القطيف",
-    "الجبيل",
-    "الخفجي",
-  ],
-  "منطقة عسير": [
-    "أبها",
-    "خميس مشيط",
-    "بيشة",
-    "النماص",
-    "محايل عسير",
-    "ظهران الجنوب",
-    "تثليث",
-    "رجال المع",
-    "سراة عبيدة",
-  ],
-  "منطقة تبوك": ["تبوك", "الوجه", "تيماء", "ضباء", "أملج", "حقل"],
-  "منطقة حائل": ["حائل", "بقعاء", "الغزالة", "الشنان", "السليمي", "الحائط"],
-  "منطقة الحدود الشمالية": ["عرعر", "رفحاء", "طريف"],
-  "منطقة جازان": ["جازان", "صامطة", "صبيا", "أبو عريش", "بيش", "الدرب"],
-  "منطقة نجران": ["نجران", "شرورة", "حبونا", "بدر الجنوب"],
-  "منطقة الباحة": ["الباحة", "بلجرشي", "المندق", "العقيق", "قلوة", "القرى"],
-  "منطقة الجوف": ["سكاكا", "القريات", "دومة الجندل", "طبرجل"],
-};
 
 const entityOptions = [
   "جمعيات تحفيظ القرآن الكريم بالمملكة",
@@ -86,21 +16,75 @@ const entityOptions = [
   "التعليم العام (الحكومي، الأهلي، الأجنبي)",
 ];
 
-const ApplicantForm = () => {
+const ApplicantForm = ({
+  initialValues,
+  applicant_id,
+}: {
+  initialValues?: Applicant;
+  applicant_id?: string;
+}) => {
   const [form] = Form.useForm();
-  const [selectedRegion, setSelectedRegion] = useState<keyof typeof regions>();
+  const [selectedRegion, setSelectedRegion] = useState<
+    keyof typeof regions | undefined
+  >(initialValues?.region);
   const [cities, setCities] = useState<string[]>([]);
+
+  const notification = useNotification();
+  const navigate = useNavigate();
+
+  const [
+    addApplicant,
+    { data: applicant, isSuccess, isLoading, isError, error: applicantError },
+  ] = useApplicantMutation();
+
+  const handleSubmit = (values: any) => {
+    const data = {
+      ...values,
+      birthdate: values.birthdate.format("YYYY-MM-DD"),
+    };
+
+    addApplicant({
+      data: data as Applicant,
+      method: initialValues ? "PATCH" : "POST",
+      url: applicant_id
+        ? `/applicants/applicants/${applicant_id}/`
+        : "/applicants/applicants/",
+    });
+  };
 
   useEffect(() => {
     if (selectedRegion) {
       setCities(regions[selectedRegion] as string[]);
-      form.setFieldsValue({ city: undefined });
+      form.setFieldsValue({ city: initialValues?.city ?? undefined });
     }
   }, [selectedRegion]);
 
-  const handleSubmit = (values: any) => {
-    console.log("Form Submitted:", values);
-  };
+  useEffect(() => {
+    if (isError) {
+      const error = applicantError as axiosBaseQueryError;
+      if (error.status == 400) {
+        handleServerErrors({
+          errorData: error.data as Record<string, string[]>,
+          form,
+        });
+      }
+
+      notification.error({ message: "خطأ في إضافة المتسابق!" });
+    }
+  }, [isError]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      notification.success({
+        message: `تم ${initialValues ? "تعديل بيانات" : "إضافة"} المتسابق`,
+      });
+      navigate(
+        `/applicants/applicant-profile/${
+          initialValues ? initialValues.id : applicant.id
+        }`
+      );
+    }
+  }, [isSuccess]);
 
   return (
     <>
@@ -111,13 +95,17 @@ const ApplicantForm = () => {
         layout="vertical"
         onFinish={handleSubmit}
         scrollToFirstError={{ behavior: "smooth", block: "center" }}
+        initialValues={{
+          ...initialValues,
+          birthdate: dayjs(initialValues?.birth_date) ?? null,
+        }}
       >
-        {/* ===================== البيانات الشخصية ===================== */}
+        {/* Personal Info  */}
         <Card title="البيانات الشخصية" className="mb-6">
           <Row gutter={16}>
             <Col xs={24} md={12}>
               <Form.Item
-                name="full_name"
+                name="name"
                 label="الاسم الكامل رباعي"
                 rules={[{ required: true, message: "يرجى إدخال الاسم الكامل" }]}
               >
@@ -155,7 +143,7 @@ const ApplicantForm = () => {
 
             <Col xs={24} md={12}>
               <Form.Item
-                name="birth_date"
+                name="birthdate"
                 label="تاريخ الميلاد"
                 rules={[
                   { required: true, message: "يرجى إدخال تاريخ الميلاد" },
@@ -205,7 +193,7 @@ const ApplicantForm = () => {
           </Row>
         </Card>
 
-        {/* =====================  الموقع ===================== */}
+        {/* location */}
         <Card title="الموقع الجغرافي" className="mb-6">
           <Row gutter={16}>
             <Col xs={24} md={12}>
@@ -246,7 +234,7 @@ const ApplicantForm = () => {
           </Row>
         </Card>
 
-        {/* ===================== الجهة ===================== */}
+        {/* entity */}
         <Card title="الجهة التعليمية" className="mb-6">
           <Row gutter={16}>
             <Col xs={24} md={12}>
@@ -277,16 +265,27 @@ const ApplicantForm = () => {
           </Row>
         </Card>
 
-        {/* ===================== بيانات التواصل ===================== */}
+        {/* contact */}
         <Card title="بيانات التواصل" className="mb-6">
           <Row gutter={16}>
             <Col xs={24} md={12}>
               <Form.Item
                 name="phone"
                 label="رقم الجوال"
-                rules={[{ required: true, message: "يرجى إدخال رقم الجوال" }]}
+                rules={[
+                  { required: true, message: "يرجى إدخال رقم الجوال" },
+                  {
+                    pattern: /^\d{8,15}$/,
+                    message:
+                      "يجب أن يحتوي رقم الجوال على أرقام فقط (من 8 إلى 15 رقمًا)",
+                  },
+                ]}
               >
-                <Input placeholder="05xxxxxxxx" maxLength={10} />
+                <Input
+                  placeholder="أدخل رقم الجوال"
+                  maxLength={15}
+                  inputMode="numeric"
+                />
               </Form.Item>
             </Col>
 
@@ -302,7 +301,7 @@ const ApplicantForm = () => {
           </Row>
         </Card>
 
-        {/* ===================== بيانات ولي الأمر ===================== */}
+        {/* guardian */}
         <Card title="بيانات ولي الأمر" className="mb-6">
           <Row gutter={16}>
             <Col xs={24} md={12}>
@@ -317,7 +316,7 @@ const ApplicantForm = () => {
 
             <Col xs={24} md={12}>
               <Form.Item
-                name="relation"
+                name="guardian_relation"
                 label="صلة القرابة"
                 rules={[{ required: true, message: "يرجى تحديد صلة القرابة" }]}
               >
@@ -331,9 +330,20 @@ const ApplicantForm = () => {
               <Form.Item
                 name="guardian_phone"
                 label="رقم جوال ولي الأمر"
-                rules={[{ required: true, message: "يرجى إدخال رقم الجوال" }]}
+                rules={[
+                  { required: true, message: " يرجى إدخال رقم جوال ولي الأمر" },
+                  {
+                    pattern: /^\d{8,15}$/,
+                    message:
+                      "يجب أن يحتوي رقم الجوال على أرقام فقط (من 8 إلى 15 رقمًا)",
+                  },
+                ]}
               >
-                <Input placeholder="05xxxxxxxx" maxLength={10} />
+                <Input
+                  placeholder="أدخل رقم الجوال"
+                  maxLength={15}
+                  inputMode="numeric"
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -355,6 +365,7 @@ const ApplicantForm = () => {
             htmlType="submit"
             size="large"
             className="min-w-28"
+            loading={isLoading}
           >
             حفظ البيانات
           </Button>

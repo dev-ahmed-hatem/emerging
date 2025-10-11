@@ -7,7 +7,8 @@ export const api = createApi({
   endpoints: () => ({}),
   tagTypes: [
     "User",
-    "PermissionsList"
+    "PermissionsList",
+    "Applicant",
   ],
   keepUnusedDataFor: 180,
   refetchOnReconnect: true,

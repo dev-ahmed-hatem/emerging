@@ -27,4 +27,4 @@ def create_modules_permissions(sender, **kwargs):
         print("✅ Created modules permissions.")
 
 
-post_migrate.connect(create_modules_permissions)
+# post_migrate.connect(create_modules_permissions)

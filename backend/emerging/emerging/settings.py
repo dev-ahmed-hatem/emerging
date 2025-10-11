@@ -36,10 +36,7 @@ INSTALLED_APPS = [
 
     'authentication.apps.AuthenticationConfig',
     'users.apps.UsersConfig',
-    # 'clients.apps.ClientsConfig',
-    # 'financials.apps.FinancialsConfig',
-    # 'projects.apps.ProjectsConfig',
-    # 'attendance.apps.AttendanceConfig',
+    'applicants.apps.ApplicantsConfig',
 ]
 
 MIDDLEWARE = [

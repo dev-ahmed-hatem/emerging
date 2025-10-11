@@ -61,9 +61,9 @@ const addSubRoutes = (
 
 let routes: RouteObject[] = addSubRoutes(appRoutes, {
   applicants: [
-    { path: "applicant-profile/:client_id", element: <ApplicantProfilePage /> },
+    { path: "applicant-profile/:applicant_id", element: <ApplicantProfilePage /> },
     { path: "add", element: <ApplicantForm /> },
-    { path: "edit/:client_id", element: <ApplicantEdit /> },
+    { path: "edit/:applicant_id", element: <ApplicantEdit /> },
   ],
 });
 
