@@ -1,7 +1,7 @@
 import { axiosBaseQueryError } from "@/app/api/axiosBaseQuery";
 import { useApplicantMutation } from "@/app/api/endpoints/applicants";
 import { useNotification } from "@/providers/NotificationProvider";
-import { Applicant, regions } from "@/types/applicant";
+import { Applicant, entityOptions, regions } from "@/types/applicant";
 import { handleServerErrors } from "@/utils/handleForm";
 import { Form, Input, Select, DatePicker, Button, Row, Col, Card } from "antd";
 import { useEffect, useState } from "react";
@@ -9,12 +9,6 @@ import { useNavigate } from "react-router";
 import dayjs from "dayjs";
 
 const { Option } = Select;
-
-const entityOptions = [
-  "جمعيات تحفيظ القرآن الكريم بالمملكة",
-  "مدارس تحفيظ القرآن الكريم",
-  "التعليم العام (الحكومي، الأهلي، الأجنبي)",
-];
 
 const ApplicantForm = ({
   initialValues,

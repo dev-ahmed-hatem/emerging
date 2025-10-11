@@ -1,3 +1,5 @@
+import { Level } from "./level";
+
 export const regions = {
   "منطقة الرياض": [
     "الرياض",
@@ -75,6 +77,12 @@ export const regions = {
   "منطقة الجوف": ["سكاكا", "القريات", "دومة الجندل", "طبرجل"],
 };
 
+export const entityOptions = [
+  "جمعيات تحفيظ القرآن الكريم بالمملكة",
+  "مدارس تحفيظ القرآن الكريم",
+  "التعليم العام (الحكومي، الأهلي، الأجنبي)",
+];
+
 export type Applicant = {
   id: string;
   name: string;
@@ -94,6 +102,8 @@ export type Applicant = {
   entity_type: string;
   entity_name: string;
   notes?: string;
+
+  level: Level;
 
   created_by?: string;
   created_at: string;

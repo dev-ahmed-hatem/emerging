@@ -1,76 +1,65 @@
 import { useState } from "react";
-import { Table, Input, Avatar, Space, Tag, Radio } from "antd";
+import { Table, Input, Avatar, Space, Tag } from "antd";
 import { SortOrder } from "antd/lib/table/interface";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router";
 import { tablePaginationConfig } from "@/utils/antd";
+import { useGetApplicantsQuery } from "@/app/api/endpoints/applicants";
+import { PaginatedResponse } from "@/types/paginatedResponse";
+import { Applicant, entityOptions, regions } from "@/types/applicant";
+import ErrorPage from "../Error";
+import Loading from "@/components/Loading";
+import { useGetLevelsQuery } from "@/app/api/endpoints/levels";
+import { ColumnsType } from "antd/es/table";
+import { generateBluePalette, Level } from "@/types/level";
 
 type ControlsType = {
   sort_by?: string;
   order?: SortOrder;
   filters: {
-    rank?: string;
-    name: string;
-    work_entity?: string;
-    seniority?: string;
+    level?: string;
+    entity_type?: string;
+    region?: string;
   };
 } | null;
 
 const ApplicantsList = () => {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
-  const [searchType, setSearchType] = useState<"name" | "city" | "region">(
-    "name"
-  );
   const [controls, setControls] = useState<ControlsType>({
-    sort_by: "membership_number",
+    sort_by: "name",
     order: "ascend",
-    filters: { name: "active" },
+    filters: {},
   });
 
-  // --- Mock applicant data
-  const applicants = [
-    {
-      id: 1,
-      name: "أحمد محمد علي",
-      region: "منطقة الرياض",
-      city: "الرياض",
-      organization: "جمعية تحفيظ القرآن بالرياض",
-      level: "المستوى الثالث",
-    },
-    {
-      id: 2,
-      name: "سارة عبدالله القحطاني",
-      region: "منطقة مكة المكرمة",
-      city: "جدة",
-      organization: "مدرسة التحفيظ الأولى",
-      level: "المستوى الثاني",
-    },
-    {
-      id: 3,
-      name: "محمد خالد الدوسري",
-      region: "منطقة الشرقية",
-      city: "الدمام",
-      organization: "التعليم العام",
-      level: "المستوى الرابع",
-    },
-    {
-      id: 4,
-      name: "نورة فهد الشمري",
-      region: "منطقة القصيم",
-      city: "بريدة",
-      organization: "مدرسة النور للتحفيظ",
-      level: "المستوى الأول",
-    },
-  ];
+  const {
+    data: levels,
+    isLoading: loadingLevels,
+    isError: levelsError,
+  } = useGetLevelsQuery();
+  const {
+    data: rawApplicants,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetApplicantsQuery({
+    no_pagination: false,
+    search,
+    page,
+    page_size: pageSize,
+    sort_by: controls?.sort_by,
+    order: controls?.order === "descend" ? "-" : "",
 
-  // --- Filter by search
-  const filteredApplicants = applicants.filter((applicant) =>
-    applicant[searchType].includes(search)
-  );
+    level: controls?.filters.level,
+    entity_type: controls?.filters.entity_type,
+    region: controls?.filters.region,
+  });
+  const applicants = rawApplicants as PaginatedResponse<Applicant> | undefined;
 
   // --- Table Columns
-  const columns = [
+  const columns: ColumnsType<Applicant> = [
     {
       title: "م",
       key: "index",
@@ -78,9 +67,10 @@ const ApplicantsList = () => {
       width: 60,
     },
     {
-      title: "الاسم الكامل",
+      title: "الاسم",
       dataIndex: "name",
       key: "name",
+      sorter: true,
       render: (text: string) => (
         <Space>
           <Avatar
@@ -95,6 +85,11 @@ const ApplicantsList = () => {
       title: "المنطقة",
       dataIndex: "region",
       key: "region",
+      filters: Object.keys(regions).map((region) => ({
+        text: region,
+        value: region,
+      })),
+      defaultFilteredValue: controls?.filters.region?.split(","),
     },
     {
       title: "المدينة",
@@ -103,22 +98,44 @@ const ApplicantsList = () => {
     },
     {
       title: "الجهة",
-      dataIndex: "organization",
-      key: "organization",
+      dataIndex: "entity_type",
+      key: "entity_type",
+      ellipsis: true,
+      filters: entityOptions.map((opt) => ({ text: opt, value: opt })),
+      defaultFilteredValue: controls?.filters.entity_type?.split(","),
+    },
+    {
+      title: "اسم الجهة",
+      dataIndex: "entity_name",
+      key: "entity_name",
       ellipsis: true,
     },
     {
       title: "المستوى الحالي",
       dataIndex: "level",
       key: "level",
-      render: (level: string) => (
-        <Tag color="blue" className="text-base font-semibold">
-          {level}
+      render: (level: Level) => (
+        <Tag
+          className="text-base font-semibold py-1 px-3"
+          style={{
+            backgroundColor: generateBluePalette(levels!.length)[
+              level.weight - 1
+            ],
+          }}
+        >
+          {level.name}
         </Tag>
       ),
+      filters: levels?.map((level) => ({
+        value: level.weight,
+        text: level.name,
+      })),
+      defaultFilteredValue: controls?.filters?.level?.split(","),
     },
   ];
 
+  if (isLoading || loadingLevels) return <Loading />;
+  if (isError || levelsError) return <ErrorPage />;
   return (
     <div className="p-6">
       <h1 className="mb-6 text-2xl md:text-3xl font-bold text-gray-800">
@@ -135,19 +152,6 @@ const ApplicantsList = () => {
             className="mb-4 w-full max-w-md h-10"
             allowClear
           />
-
-          <div className="flex flex-wrap gap-3 items-center">
-            <span>بحث ب:</span>
-            <Radio.Group
-              value={searchType}
-              onChange={(e) => setSearchType(e.target.value)}
-              className="mt-1"
-            >
-              <Radio.Button value="name">الاسم</Radio.Button>
-              <Radio.Button value="region">المنطقة</Radio.Button>
-              <Radio.Button value="city">المدينة</Radio.Button>
-            </Radio.Group>
-          </div>
         </div>
 
         {/* Add Button */}
@@ -166,15 +170,24 @@ const ApplicantsList = () => {
 
       {/* Table */}
       <Table
-        dataSource={filteredApplicants}
+        dataSource={applicants?.data}
         columns={columns}
         rowKey="id"
         bordered
         onRow={(record) => ({
           onClick: () => navigate(`applicant-profile/${record.id}`),
         })}
-        // loading={isFetching}
-        pagination={tablePaginationConfig()}
+        loading={isFetching}
+        pagination={tablePaginationConfig({
+          total: applicants?.count,
+          current: applicants?.page,
+          showQuickJumper: true,
+          pageSize,
+          onChange(page, pageSize) {
+            setPage(page);
+            setPageSize(pageSize);
+          },
+        })}
         onChange={(_, filters, sorter: any) => {
           setControls({
             ...(sorter.column?.key && { sort_by: sorter.column.key }),

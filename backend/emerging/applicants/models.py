@@ -5,6 +5,33 @@ from django.utils.translation import gettext_lazy as _
 from users.models import User
 
 
+class Level(models.Model):
+    name = models.CharField(
+        _("اسم المستوى"),
+        max_length=100,
+        unique=True,
+        help_text=_("أدخل اسم المستوى باللغة العربية، مثل: المستوى الأول"),
+        error_messages={
+            "unique": _("يوجد مستوى بهذا الاسم مسبقًا."),
+            "blank": _("يرجى إدخال اسم المستوى."),
+        },
+    )
+
+    weight = models.PositiveSmallIntegerField(
+        _("الترتيب"),
+        help_text=_("رقم يُستخدم لترتيب المستويات (مثلاً 1، 2، 3)"),
+        error_messages={"invalid": _("يجب إدخال رقم صحيح.")},
+    )
+
+    class Meta:
+        verbose_name = _("المستوى")
+        verbose_name_plural = _("المستويات")
+        ordering = ["weight"]
+
+    def __str__(self):
+        return f"{self.name} (ترتيب: {self.weight})"
+
+
 class Applicant(models.Model):
     name = models.CharField(
         _("الاسم الكامل رباعي"),
@@ -127,6 +154,14 @@ class Applicant(models.Model):
         _("ملاحظات"),
         blank=True,
         null=True,
+    )
+
+    level = models.ForeignKey(
+        "Level",
+        verbose_name=_("المستوى"),
+        on_delete=models.RESTRICT,
+        null=True,
+        blank=True,
     )
 
     created_at = models.DateTimeField(_("تاريخ الإدخال"), auto_now_add=True)

@@ -5,11 +5,7 @@ export const api = createApi({
   reducerPath: "api",
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
-  tagTypes: [
-    "User",
-    "PermissionsList",
-    "Applicant",
-  ],
+  tagTypes: ["User", "PermissionsList", "Applicant", "Level"],
   keepUnusedDataFor: 180,
   refetchOnReconnect: true,
 });
