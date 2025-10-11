@@ -83,6 +83,18 @@ const gradients = [
   "from-[#6366F1] to-[#0EA5E9]", // indigo → sky blue
 ];
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/90 p-2 rounded-lg shadow text-sm border border-gray-200">
+        <p className="font-semibold text-gray-800">{label}</p>
+        <p className="text-blue-600">{`عدد المتسابقين: ${payload[0].value}`}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
 const ApplicantsStats: React.FC = () => {
   const { data: stats, isLoading, isError } = useGetApplicantsStatsQuery();
 
@@ -110,7 +122,7 @@ const ApplicantsStats: React.FC = () => {
             <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
             <XAxis dataKey="name" />
             <YAxis />
-            <Tooltip />
+            <Tooltip content={<CustomTooltip />} />
             <Bar dataKey="count" radius={[8, 8, 0, 0]} barSize={150}>
               {stats!.levels.map((_, i) => (
                 <Cell key={i} fill={COLORS_LEVELS[i % COLORS_LEVELS.length]} />
