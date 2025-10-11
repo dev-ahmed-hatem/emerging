@@ -2,7 +2,7 @@ import api from "../apiSlice";
 import { PaginatedResponse } from "@/types/paginatedResponse";
 import qs from "query-string";
 import { QueryParams } from "@/types/query_param";
-import { Applicant } from "@/types/applicant";
+import { Applicant, ApplicantStats } from "@/types/applicant";
 import { Level } from "@/types/level";
 
 export const applicantsEndpoints = api.injectEndpoints({
@@ -69,6 +69,14 @@ export const applicantsEndpoints = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Applicant", id: "LIST" }],
     }),
+
+    // stats
+    getApplicantsStats: builder.query<ApplicantStats, void>({
+      query: () => ({
+        url: `/applicants/applicants-stats/`,
+        method: "GET",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -78,4 +86,5 @@ export const {
   useGetApplicantQuery,
   useApplicantMutation,
   useChangeLevelMutation,
+  useGetApplicantsStatsQuery,
 } = applicantsEndpoints;

@@ -1,9 +1,11 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from .serializers import ApplicantWriteSerializer, ApplicantReadSerializer, LevelSerializer
 from .models import Applicant, Level
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from django.db.models import Count
 
 
 class LevelViewSet(ModelViewSet):
@@ -101,3 +103,96 @@ class ApplicantViewSet(ModelViewSet):
             "message": f"تم إنزال المتسابق إلى {applicant.level.name}",
             "new_level": LevelSerializer(applicant.level, context={'request': request}).data
         }, status=status.HTTP_200_OK)
+
+
+class ApplicantStatsView(APIView):
+    """
+    Returns statistics about applicants:
+    - Levels distribution
+    - Gender distribution
+    - Region distribution
+    - Entity type distribution
+    """
+
+    def get(self, request):
+        # === Levels Stats ===
+        levels_data = []
+        levels = Level.objects.order_by("weight")
+        for level in levels:
+            count = Applicant.objects.filter(level=level).count()
+            levels_data.append({
+                "name": level.name,
+                "count": count
+            })
+
+        # === Gender Stats ===
+        gender_counts = (
+            Applicant.objects.values("gender")
+            .annotate(value=Count("id"))
+            .order_by("gender")
+        )
+        # Ensure both genders appear even if zero
+        gender_labels = ["ذكر", "أنثى"]
+        gender_data = [
+            {"name": g, "value": next((item["value"] for item in gender_counts if item["gender"] == g), 0)}
+            for g in gender_labels
+        ]
+
+        # === Region Stats ===
+        region_labels = [
+            "منطقة الرياض",
+            "منطقة مكة المكرمة",
+            "منطقة المدينة المنورة",
+            "منطقة القصيم",
+            "المنطقة الشرقية",
+            "منطقة عسير",
+            "منطقة تبوك",
+            "منطقة حائل",
+            "منطقة الحدود الشمالية",
+            "منطقة جازان",
+            "منطقة نجران",
+            "منطقة الباحة",
+            "منطقة الجوف",
+        ]
+
+        region_counts = (
+            Applicant.objects.values("region")
+            .annotate(count=Count("id"))
+            .order_by("region")
+        )
+        region_data = [
+            {
+                "region": r,
+                "count": next((item["count"] for item in region_counts if item["region"] == r), 0)
+            }
+            for r in region_labels
+        ]
+
+        # === Entity Type Stats ===
+        entity_labels = [
+            "جمعيات تحفيظ القرآن الكريم بالمملكة",
+            "مدارس تحفيظ القرآن الكريم",
+            "التعليم العام (الحكومي، الأهلي، الأجنبي)",
+        ]
+        entity_counts = (
+            Applicant.objects.values("entity_type")
+            .annotate(value=Count("id"))
+            .order_by("entity_type")
+        )
+        entity_data = [
+            {
+                "name": e,
+                "value": next((item["value"] for item in entity_counts if item["entity_type"] == e), 0)
+            }
+            for e in entity_labels
+        ]
+
+        # === Combine All ===
+        data = {
+            "levels": levels_data,
+            "gender": gender_data,
+            "regions": region_data,
+            "entityTypes": entity_data,
+        }
+
+        return Response(data)

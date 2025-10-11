@@ -13,12 +13,10 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
-import {
-  TeamOutlined,
-  EnvironmentOutlined,
-  TrophyOutlined,
-  BankOutlined,
-} from "@ant-design/icons";
+import { EnvironmentOutlined } from "@ant-design/icons";
+import { useGetApplicantsStatsQuery } from "@/app/api/endpoints/applicants";
+import Loading from "../Loading";
+import ErrorPage from "@/pages/Error";
 
 const { Title } = Typography;
 
@@ -48,12 +46,12 @@ const mockApplicantStats = {
     { region: "منطقة جازان", count: 70 },
     { region: "منطقة نجران", count: 45 },
     { region: "منطقة الباحة", count: 36 },
+    { region: "منطقة الجوف", count: 36 },
   ],
   entityTypes: [
-    { name: "مدرسة", value: 120 },
-    { name: "جامعة", value: 90 },
-    { name: "مركز تدريب", value: 50 },
-    { name: "أخرى", value: 40 },
+    { name: "جمعيات تحفيظ القرآن الكريم بالمملكة", value: 120 },
+    { name: "مدارس تحفيظ القرآن الكريم", value: 90 },
+    { name: "التعليم العام (الحكومي، الأهلي، الأجنبي)", value: 50 },
   ],
 };
 
@@ -86,8 +84,10 @@ const gradients = [
 ];
 
 const ApplicantsStats: React.FC = () => {
-  const stats = mockApplicantStats;
+  const { data: stats, isLoading, isError } = useGetApplicantsStatsQuery();
 
+  if (isLoading) return <Loading />;
+  if (isError) return <ErrorPage />;
   return (
     <div className="p-4 flex flex-col gap-8">
       {/* Title */}
@@ -106,13 +106,13 @@ const ApplicantsStats: React.FC = () => {
           توزيع المتسابقين حسب المستوى
         </Title>
         <ResponsiveContainer width="100%" height={280}>
-          <BarChart data={stats.levels}>
+          <BarChart data={stats!.levels}>
             <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
             <Bar dataKey="count" radius={[8, 8, 0, 0]} barSize={150}>
-              {stats.levels.map((_, i) => (
+              {stats!.levels.map((_, i) => (
                 <Cell key={i} fill={COLORS_LEVELS[i % COLORS_LEVELS.length]} />
               ))}
             </Bar>
@@ -128,7 +128,7 @@ const ApplicantsStats: React.FC = () => {
         <ResponsiveContainer width="100%" height={260}>
           <PieChart>
             <Pie
-              data={stats.gender}
+              data={stats!.gender}
               dataKey="value"
               nameKey="name"
               cx="50%"
@@ -136,7 +136,7 @@ const ApplicantsStats: React.FC = () => {
               outerRadius={90}
               label
             >
-              {stats.gender.map((_, i) => (
+              {stats!.gender.map((_, i) => (
                 <Cell key={i} fill={COLORS_GENDER[i % COLORS_GENDER.length]} />
               ))}
             </Pie>
@@ -153,7 +153,7 @@ const ApplicantsStats: React.FC = () => {
         </Title>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {stats.regions.map((region, index) => (
+          {stats!.regions.map((region, index) => (
             <div
               key={region.region}
               className={`
@@ -193,7 +193,7 @@ const ApplicantsStats: React.FC = () => {
         <ResponsiveContainer width="100%" height={280}>
           <PieChart>
             <Pie
-              data={stats.entityTypes}
+              data={stats!.entityTypes}
               dataKey="value"
               nameKey="name"
               cx="50%"
@@ -203,7 +203,7 @@ const ApplicantsStats: React.FC = () => {
               paddingAngle={4}
               label
             >
-              {stats.entityTypes.map((_, i) => (
+              {stats!.entityTypes.map((_, i) => (
                 <Cell
                   key={i}
                   fill={COLORS_ENTITIES[i % COLORS_ENTITIES.length]}

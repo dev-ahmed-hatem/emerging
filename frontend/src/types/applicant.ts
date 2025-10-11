@@ -108,3 +108,10 @@ export type Applicant = {
   created_by?: string;
   created_at: string;
 };
+
+export type ApplicantStats = {
+  levels: { name: string; count: number }[];
+  gender: { name: "ذكور" | "إناث"; value: number }[];
+  regions: { region: keyof typeof regions; count: number }[];
+  entityTypes: { name: keyof typeof entityOptions; value: number }[];
+};
