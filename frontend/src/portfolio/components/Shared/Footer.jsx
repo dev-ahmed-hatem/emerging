@@ -15,11 +15,11 @@ import {
 
 // الخدمات التي ستظهر في القائمة المنسدلة
 const services = [
-  { name: "الندوات", path: "/services/seminars" },
-  { name: "الدعم", path: "/services/support" },
-  { name: "الاستشارات", path: "/services/consultations" },
-  { name: "الدورات التدريبية", path: "/services/training" },
-  { name: "المشروعات", path: "/services/projects" },
+  { name: "الندوات", path: "/" },
+  { name: "الدعم", path: "/" },
+  { name: "الاستشارات", path: "/" },
+  { name: "الدورات التدريبية", path: "/" },
+  { name: "المشروعات", path: "/" },
 ];
 
 // روابط التنقل الرئيسية
@@ -27,7 +27,7 @@ const mainNavItems = [
   { name: "الرئيسية", path: "/", type: "link" },
   { name: "الأعضاء", path: "/members", type: "link" },
   { name: "عن اللجنة", path: "/about", type: "link" },
-  { name: "المدونة", path: "/blogs", type: "link" },
+  // { name: "المدونة", path: "/blogs", type: "link" },
   { name: "اتصل بنا", path: "/contacts", type: "link" },
 ];
 
@@ -35,8 +35,9 @@ const mainNavItems = [
 const contactInfo = [
   {
     icon: <FaMapMarkerAlt className="text-primary-400 h-5 w-5" />,
-    text: "المقر الرئيسي: الرياض، شارع الأمير محمد بن سلمان",
-    href: "https://maps.google.com/?q=الرياض،+شارع+الأمير+محمد+بن+سلمان",
+    text: "الجزيرة، الرويس، جدة ",
+    href: "https://maps.app.goo.gl/YP9XumEkUm9kPXvs5",
+    target:"_blank"
   },
   {
     icon: <FaPhone className="text-primary-400 h-5 w-5" />,
@@ -54,26 +55,26 @@ const policyLinks = [
 
 // روابط التواصل الاجتماعي
 const socialLinks = [
-  {
-    icon: <FaInstagram />,
-    href: "https://www.instagram.com/ccsqmksa",
-    label: "Instagram",
-  },
-  {
-    icon: <FaTiktok />,
-    href: "https://www.tiktok.com/@ccsqmksa",
-    label: "TikTok",
-  },
-  {
-    icon: <FaSnapchatGhost />,
-    href: "https://www.snapchat.com/add/ccsqmksa",
-    label: "Snapchat",
-  },
-  {
-    icon: <FaXTwitter />,
-    href: "https://x.com/ccsqmKSA",
-    label: "X (Twitter)",
-  },
+  // {
+  //   icon: <FaInstagram />,
+  //   href: "https://www.instagram.com/ccsqmksa",
+  //   label: "Instagram",
+  // },
+  // {
+  //   icon: <FaTiktok />,
+  //   href: "https://www.tiktok.com/@ccsqmksa",
+  //   label: "TikTok",
+  // },
+  // {
+  //   icon: <FaSnapchatGhost />,
+  //   href: "https://www.snapchat.com/add/ccsqmksa",
+  //   label: "Snapchat",
+  // },
+  // {
+  //   icon: <FaXTwitter />,
+  //   href: "https://x.com/ccsqmKSA",
+  //   label: "X (Twitter)",
+  // },
 ];
 
 // ===================== المكون الفرعي =====================

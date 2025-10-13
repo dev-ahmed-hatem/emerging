@@ -18,6 +18,7 @@ import Blogs from "../../portfolio/pages/Blogs";
 import Contacts from "../../portfolio/pages/Contacts";
 import Prize from "../../portfolio/pages/prize";
 import SingleBlogPage from "../../portfolio/pages/SingleBlogPage";
+import Members from "../../portfolio/pages/Members";
 
 export type AppRoute = RouteObject & {
   key?: string;
@@ -71,6 +72,7 @@ export const appRoutes: AppRoute[] = [
       { path: "contacts", element: <Contacts /> },
       { path: "prize", element: <Prize /> },
       { path: "singleblog", element: <SingleBlogPage /> },
+      { path: "members", element: <Members /> },
     ],
   },
   {

@@ -67,7 +67,7 @@ const mainNavItems = [
   // { name: "الخدمات", path: "#", type: "dropdown", subLinks: services },
   { name: "الأعضاء", path: "/members", type: "link" },
   { name: "عن اللجنة", path: "/about", type: "link" },
-  { name: "المدونة", path: "/blogs", type: "link" },
+  // { name: "المدونة", path: "/blogs", type: "link" },
   { name: "اتصل بنا", path: "/contacts", type: "link" },
 ];
 
