@@ -247,7 +247,7 @@ const HeroSlider = () => {
       <div className="absolute inset-0 flex items-center justify-between p-4 md:p-10">
         {/* السهم الأيسر (Next) */}
         <button
-          onClick={debouncedNextSlide}
+          onClick={debouncedPrevSlide}
           className="p-3 md:p-4 bg-blue-400 cursor-pointer hover:bg-blue-400/50 text-white rounded-full transition duration-300 transform hover:scale-110 shadow-lg focus:outline-none"
           aria-label="Next Slide"
         >
@@ -271,7 +271,7 @@ const HeroSlider = () => {
 
         {/* السهم الأيمن (Previous) */}
         <button
-          onClick={debouncedPrevSlide}
+          onClick={debouncedNextSlide}
           className="p-3 md:p-4 bg-blue-400 cursor-pointer hover:bg-blue-400/50 text-white rounded-full transition duration-300 transform hover:scale-110 shadow-lg focus:outline-none"
           aria-label="Previous Slide"
         >

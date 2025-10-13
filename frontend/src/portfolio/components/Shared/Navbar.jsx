@@ -64,7 +64,7 @@ const services = [
 
 const mainNavItems = [
   { name: "الرئيسية", path: "/", type: "link" },
-  { name: "الخدمات", path: "#", type: "dropdown", subLinks: services },
+  // { name: "الخدمات", path: "#", type: "dropdown", subLinks: services },
   { name: "الأعضاء", path: "/members", type: "link" },
   { name: "عن اللجنة", path: "/about", type: "link" },
   { name: "المدونة", path: "/blogs", type: "link" },
