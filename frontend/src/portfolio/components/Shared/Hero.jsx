@@ -132,7 +132,7 @@ const HeroSlider = () => {
         style={{
           width: `${slides.length * 100}%`,
           // التحريك يعتمد على الإزاحة السلبية لتحريك الحاوية إلى اليسار، مما يكشف الشريحة التالية في RTL
-          transform: `translateX(-${currentIndex * (100 / slides.length)}%)`,
+          transform: `translateX(${currentIndex * 100}%)`,
         }}
       >
         {slides.map((slide, index) => (

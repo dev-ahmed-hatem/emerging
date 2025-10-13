@@ -41,47 +41,43 @@ import { enUS } from "@/admin/utils/locale";
 function Home() {
   const isHome = useMatch("/");
 
-  return (
-    <ConfigProvider locale={enUS}>
-      {isHome ? (
-        <>
-          <Navbar />
-          <Hero />
+  return isHome ? (
+    <>
+      <Navbar />
+      <Hero />
 
-          {/* <AboutSection /> */}
-          <AboutSection2 />
-          {/* <AboutSection3 /> */}
+      {/* <AboutSection /> */}
+      <AboutSection2 />
+      {/* <AboutSection3 /> */}
 
-          {/* <MembersSection/> */}
-          <MembersSection2 />
+      {/* <MembersSection/> */}
+      <MembersSection2 />
 
-          {/* <GoalsSection /> */}
-          <GoalsSection2 />
-          {/* <GoalsSection3 /> */}
+      {/* <GoalsSection /> */}
+      <GoalsSection2 />
+      {/* <GoalsSection3 /> */}
 
-          {/* <QuranPrizeSection /> */}
-          <QuranPrizeSection2 />
-          {/* <QuranPrizeSection3 /> */}
-          {/* <QuranPrizeSection4 /> */}
+      {/* <QuranPrizeSection /> */}
+      <QuranPrizeSection2 />
+      {/* <QuranPrizeSection3 /> */}
+      {/* <QuranPrizeSection4 /> */}
 
-          {/* <AchievementsSection /> */}
-          {/* <AchievementsSection3 /> */}
-          <AchievementsSection2 />
-          {/* <AchievementsSection4/> */}
+      {/* <AchievementsSection /> */}
+      {/* <AchievementsSection3 /> */}
+      <AchievementsSection2 />
+      {/* <AchievementsSection4/> */}
 
-          {/* <FoundingSocietiesSection/> */}
-          <FoundingSocietiesSection2 />
+      {/* <FoundingSocietiesSection/> */}
+      <FoundingSocietiesSection2 />
 
-          <LatestNewsSection />
-          <StrategicPlanSection />
-          {/* <StrategicPlanSection2/> */}
+      <LatestNewsSection />
+      <StrategicPlanSection />
+      {/* <StrategicPlanSection2/> */}
 
-          <Footer />
-        </>
-      ) : (
-        <Outlet />
-      )}
-    </ConfigProvider>
+      <Footer />
+    </>
+  ) : (
+    <Outlet />
   );
 }
 
