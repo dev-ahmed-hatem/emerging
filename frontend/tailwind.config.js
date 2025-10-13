@@ -4,9 +4,6 @@ export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}", "./index.html"],
   theme: {
     extend: {
-      fontFamily: {
-        cairo: ["Cairo", "ui-sans-serif", "system-ui", "ui-sans", "sans-serif"],
-      },
       colors: {
         orange: {
           DEFAULT: "#FAAF40",
@@ -51,6 +48,66 @@ export default {
           950: "#003917",
         },
         whisper: "#F0F0F5",
+
+        // portfolio
+        primary: {
+          50: "#e8f0ff",
+          100: "#c5d6ff",
+          200: "#9ebaff",
+          300: "#759cff",
+          400: "#4d7eff",
+          500: "#246efe",
+          600: "#1e60e6",
+          700: "#174ec4",
+          800: "#123da0",
+          900: "#0b2872",
+        },
+        secondary: {
+          50: "#edfdff",
+          100: "#c8f7fe",
+          200: "#a2f1fe",
+          300: "#7cebfe",
+          400: "#55e5fe",
+          500: "#6de7fe",
+          600: "#3ed8f3",
+          700: "#1dc3df",
+          800: "#0ba9c3",
+          900: "#0588a0",
+        },
+        neutral: {
+          50: "#f9fafb",
+          100: "#f3f4f6",
+          200: "#e5e7eb",
+          300: "#d1d5db",
+          400: "#9ca3af",
+          500: "#6b7280",
+          600: "#4b5563",
+          700: "#374151",
+          800: "#1f2937",
+          900: "#111827",
+        },
+        success: "#22c55e",
+        warning: "#f59e0b",
+        error: "#ef4444",
+        info: "#3b82f6",
+      },
+      fontFamily: {
+        cairo: ["Cairo", "ui-sans-serif", "system-ui", "ui-sans", "sans-serif"],
+        "committee-primary": ["Cairo", "Almarai", "sans-serif"],
+        "committee-secondary": ["Amiri", "serif"],
+        "quran-primary": ["Noto Naskh Arabic", "Harir", "serif"],
+        "quran-secondary": ["Lotus", "serif"],
+      },
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: "1rem",
+          sm: "1.5rem",
+          lg: "2rem",
+        },
+        screens: {
+          "2xl": "1440px",
+        },
       },
     },
   },

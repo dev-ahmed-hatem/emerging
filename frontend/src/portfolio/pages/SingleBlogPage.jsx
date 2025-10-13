@@ -1,5 +1,5 @@
-import Footer from "../../src/components/Shared/Footer";
-import { useNavigate } from "react-router-dom";
+import Footer from "../../portfolio/components/Shared/Footer";
+import { useNavigate } from "react-router";
 
 import React, { useState, useEffect } from "react";
 import {
@@ -426,12 +426,7 @@ const RelatedPosts = ({ currentPostId, newsItems, onSelect }) => {
  * @param {Array} props.newsItems - قائمة بجميع الأخبار لعرض الأخبار ذات الصلة.
  * @param {Function} props.onSelectPost - دالة لاختيار خبر آخر (للأخبار ذات الصلة).
  */
-const SingleBlogPage = ({
-  item = sampleItem,
-
-  newsItems = allNewsItems,
-  onSelectPost = (post) => console.log(`Post selected: ${post.title}`),
-}) => {
+const SingleBlogPage = () => {
   if (!item || !item.content)
     return (
       <div

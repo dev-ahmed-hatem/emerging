@@ -10,6 +10,15 @@ import SettingsPage from "@/admin/pages/Settings";
 import PermissionProvider from "@/admin/providers/PermissionProvider";
 import ApplicantsList from "@/admin/pages/applicants/ApplicantsList";
 
+// portfolio routes
+
+import Home from "../../portfolio/pages/Home";
+import About from "../../portfolio/pages/About";
+import Blogs from "../../portfolio/pages/Blogs";
+import Contacts from "../../portfolio/pages/Contacts";
+import Prize from "../../portfolio/pages/prize";
+import SingleBlogPage from "../../portfolio/pages/SingleBlogPage";
+
 export type AppRoute = RouteObject & {
   key?: string;
   label?: string;
@@ -51,6 +60,18 @@ export const appRoutes: AppRoute[] = [
   {
     path: "/admin/login",
     element: <LoginPage />,
+  },
+
+  {
+    path: "/",
+    element: <Home />, // optional wrapper if your site has a layout (navbar/footer)
+    children: [
+      { path: "about", element: <About /> },
+      { path: "blogs", element: <Blogs /> },
+      { path: "contacts", element: <Contacts /> },
+      { path: "prize", element: <Prize /> },
+      { path: "singleblog", element: <SingleBlogPage /> },
+    ],
   },
   {
     path: "*",

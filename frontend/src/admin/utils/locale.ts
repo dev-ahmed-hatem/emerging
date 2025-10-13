@@ -1,7 +1,8 @@
 import arEG from "antd/locale/ar_EG";
+import enUS from "antd/locale/en_US";
 import dayjs from "dayjs";
 import "dayjs/locale/ar";
 
 dayjs.locale("ar");
 
-export { arEG, dayjs };
+export { arEG, enUS, dayjs };

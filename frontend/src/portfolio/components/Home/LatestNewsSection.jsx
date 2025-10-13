@@ -355,7 +355,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, ArrowLeft, Calendar } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 // ********************************************
 // ألوان الهوية

@@ -1,6 +1,6 @@
-import Navbar from "/src/components/Shared/Navbar";
-import Hero from "/src/components/Shared/Hero";
-import Footer from "/src/components/Shared/Footer";
+import Navbar from "../components/Shared/Navbar";
+import Hero from "../components/Shared/Hero";
+import Footer from "../components/Shared/Footer";
 
 import AboutSection from "../components/Home/AboutSection";
 import AboutSection2 from "../components/Home/AboutSection2";
@@ -30,45 +30,58 @@ import QuranPrizeSection3 from "../components/Home/QuranPrizeSection3";
 import QuranPrizeSection4 from "../components/Home/QuranPrizeSection4";
 
 import LatestNewsSection from "../components/Home/LatestNewsSection";
+import { Outlet, useMatch } from "react-router";
+
+import { ConfigProvider } from "antd";
+
+import "../App.css";
+import "../portfolio-index.css";
+import { enUS } from "@/admin/utils/locale";
 
 function Home() {
+  const isHome = useMatch("/");
+
   return (
-    <>
-      <Navbar />
-      <Hero />
+    <ConfigProvider locale={enUS}>
+      {isHome ? (
+        <>
+          <Navbar />
+          <Hero />
 
-      {/* <AboutSection /> */}
-      <AboutSection2 />
-      {/* <AboutSection3 /> */}
+          {/* <AboutSection /> */}
+          <AboutSection2 />
+          {/* <AboutSection3 /> */}
 
-      {/* <MembersSection/> */}
-      <MembersSection2 />
+          {/* <MembersSection/> */}
+          <MembersSection2 />
 
-      {/* <GoalsSection /> */}
-      <GoalsSection2 />
-      {/* <GoalsSection3 /> */}
+          {/* <GoalsSection /> */}
+          <GoalsSection2 />
+          {/* <GoalsSection3 /> */}
 
-      {/* <QuranPrizeSection /> */}
-      <QuranPrizeSection2 />
-      {/* <QuranPrizeSection3 /> */}
-      {/* <QuranPrizeSection4 /> */}
+          {/* <QuranPrizeSection /> */}
+          <QuranPrizeSection2 />
+          {/* <QuranPrizeSection3 /> */}
+          {/* <QuranPrizeSection4 /> */}
 
-      {/* <AchievementsSection /> */}
-      {/* <AchievementsSection3 /> */}
-      <AchievementsSection2 />
-      {/* <AchievementsSection4/> */}
+          {/* <AchievementsSection /> */}
+          {/* <AchievementsSection3 /> */}
+          <AchievementsSection2 />
+          {/* <AchievementsSection4/> */}
 
-      {/* <FoundingSocietiesSection/> */}
-      <FoundingSocietiesSection2 />
+          {/* <FoundingSocietiesSection/> */}
+          <FoundingSocietiesSection2 />
 
-<LatestNewsSection/>
-      <StrategicPlanSection />
-      {/* <StrategicPlanSection2/> */}
+          <LatestNewsSection />
+          <StrategicPlanSection />
+          {/* <StrategicPlanSection2/> */}
 
-
-
-       <Footer />
-    </>
+          <Footer />
+        </>
+      ) : (
+        <Outlet />
+      )}
+    </ConfigProvider>
   );
 }
 

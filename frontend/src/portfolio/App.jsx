@@ -1,8 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Shared/Navbar";
-import Hero from "./components/Shared/Hero";
-import Footer from "./components/Shared/Footer";
+import { BrowserRouter, Routes, Route } from "react-router";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
