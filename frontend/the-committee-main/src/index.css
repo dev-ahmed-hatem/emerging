@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+
+
+
+
+/* ===============================
+   🎨 Font Faces — Committee Identity
+   =============================== */
+
+@font-face {
+  font-family: 'Amiri';
+  src: url('/Fonts/Amiri-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Amiri';
+  src: url('/Fonts/Amiri-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Cairo';
+  src: url('/Fonts/Cairo-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Cairo';
+  src: url('/Fonts/Cairo-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Cairo';
+  src: url('/Fonts/Cairo-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Cairo';
+  src: url('/Fonts/Cairo-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Almarai';
+  src: url('/Fonts/Almarai-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Almarai';
+  src: url('/Fonts/Almarai-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Almarai';
+  src: url('/Fonts/Almarai-Light.ttf') format('truetype');
+  font-weight: 300;
+}
+@font-face {
+  font-family: 'Almarai';
+  src: url('/Fonts/Almarai-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+}
+
+/* ===============================
+   📖 Font Faces — Quran Competition Identity
+   =============================== */
+
+@font-face {
+  font-family: 'Harir';
+  src: url('/Fonts/Harir_complete_OTF_Harir.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Harir';
+  src: url('/Fonts/Harir_complete_OTF_Harir_Bold.otf') format('opentype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Lotus';
+  src: url('/Fonts/alfont_com_خط-لوتس_نسخ.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Lotus';
+  src: url('/Fonts/alfont_com_لوتس-عريض.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Noto Naskh Arabic';
+  src: url('/Fonts/NotoNaskhArabic-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Noto Naskh Arabic';
+  src: url('/Fonts/NotoNaskhArabic-Medium.ttf') format('truetype');
+  font-weight: 500;
+}
+@font-face {
+  font-family: 'Noto Naskh Arabic';
+  src: url('/Fonts/NotoNaskhArabic-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Noto Naskh Arabic';
+  src: url('/Fonts/NotoNaskhArabic-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+
+
+
+
+
+
+/* ===============================
+     Global Settings
+   =============================== */
+
+:root {
+  --font-committee-primary: 'Cairo', 'Almarai', sans-serif;
+  --font-committee-secondary: 'Amiri', serif;
+
+  --font-quran-primary: 'Noto Naskh Arabic', 'Harir', serif;
+  --font-quran-secondary: 'Lotus', serif;
+}
+
+
+
+
+@theme {
+  --color-primary-50: #e8f0ff;
+  --color-primary-100: #c5d6ff;
+  --color-primary-200: #9ebaff;
+  --color-primary-300: #759cff;
+  --color-primary-400: #4d7eff;
+  --color-primary-500: #246efe;
+  --color-primary-600: #1e60e6;
+  --color-primary-700: #174ec4;
+  --color-primary-800: #123da0;
+  --color-primary-900: #0b2872;
+
+  --color-secondary-50: #edfdff;
+  --color-secondary-100: #c8f7fe;
+  --color-secondary-200: #a2f1fe;
+  --color-secondary-300: #7cebfe;
+  --color-secondary-400: #55e5fe;
+  --color-secondary-500: #6de7fe;
+  --color-secondary-600: #3ed8f3;
+  --color-secondary-700: #1dc3df;
+  --color-secondary-800: #0ba9c3;
+  --color-secondary-900: #0588a0;
+
+  --color-neutral-50: #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+}
+/* 🌐 إعدادات عامة للموقع */
+html {
+  direction: rtl; 
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+ font-family: var(--font-committee-primary);
+  @apply bg-white text-neutral-800;
+}
+
+/* 🧱 الحاوية الأساسية للموقع */
+.container {
+  @apply w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 box-border;
+}
+
+/*   العناوين العامة */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}

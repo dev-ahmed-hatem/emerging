@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  direction: rtl;
+  @apply font-cairo;
+}
+
+*:not([class^="ant"]) {
+  @apply duration-75;
+}
+
+*::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: theme(colors.gray.900);
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: theme(colors.white);
+}
+
+.rounded .ant-image-mask {
+  @apply rounded-full;
+}

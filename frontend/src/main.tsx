@@ -1,16 +1,17 @@
 import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import "./styles/index.css";
-import "./styles/cairo.css";
 import { createBrowserRouter, RouterProvider } from "react-router";
-import routes from "./app/routerConfig";
-import { arEG } from "./utils/locale";
+import routes from "./admin/app/routerConfig";
+import { arEG } from "./admin/utils/locale";
 import { ConfigProvider } from "antd";
-import "./styles/tables.css";
-import "./styles/add-form.css";
 import { Provider as ReduxProvider } from "react-redux";
-import store from "./app/redux/store";
-import NotificationProvider from "./providers/NotificationProvider";
+import store from "./admin/app/redux/store";
+import NotificationProvider from "./admin/providers/NotificationProvider";
+
+import "./admin/styles/index.css";
+import "./admin/styles/cairo.css";
+import "./admin/styles/tables.css";
+import "./admin/styles/add-form.css";
+import { createRoot } from "react-dom/client";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
