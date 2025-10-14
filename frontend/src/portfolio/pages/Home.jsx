@@ -70,7 +70,7 @@ function Home() {
       {/* <FoundingSocietiesSection/> */}
       <FoundingSocietiesSection2 />
 
-      <LatestNewsSection />
+      {/* <LatestNewsSection /> */}
       <StrategicPlanSection />
       {/* <StrategicPlanSection2/> */}
 
