@@ -12,14 +12,14 @@ import {
 const contactLinks = [
   {
     icon: FaMapMarkerAlt,
-    text: "موقع المقر",
+    text: "مقر اللجنة",
     href: "https://maps.app.goo.gl/2swqBmpEMwC4ijFB9",
     color: "text-primary-600",
   },
   {
     icon: FaPhoneAlt,
-    text: "+966 55 3066775",
-    href: "tel:+966553066775",
+    text: "966553066775‬+",
+    href: "tel:+966553066775‬",
     color: "text-secondary-600",
   },
   {
@@ -43,15 +43,15 @@ const contactLinks = [
   {
     icon: FaXTwitter,
     text: "إكس (تويتر)",
-    href: "https://x.com/ccsqmKSA",
+    href: "https://x.com/CCQmajli_sa",
     color: "text-sky-500",
   },
-  {
-    icon: FaFacebookF,
-    text: "فيسبوك",
-    href: "#",
-    color: "text-blue-600",
-  },
+  // {
+  //   icon: FaFacebookF,
+  //   text: "فيسبوك",
+  //   href: "#",
+  //   color: "text-blue-600",
+  // },
 ];
 
 const services = [

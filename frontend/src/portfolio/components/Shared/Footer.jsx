@@ -41,7 +41,7 @@ const contactInfo = [
   },
   {
     icon: <FaPhone className="text-primary-400 h-5 w-5" />,
-    text: "+966 55 3066775 (للاستفسارات)",
+    text: "966553066775‬+ (للاستفسارات)",
     href: "tel:+966553066775",
   },
 ];

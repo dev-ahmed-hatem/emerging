@@ -202,6 +202,16 @@ import {
   Facebook,
 } from "lucide-react";
 
+import { FaTiktok, FaXTwitter, FaFacebookF } from "react-icons/fa6";
+
+import {
+  FaMapMarkerAlt,
+  FaInstagram,
+  FaPhoneAlt,
+  FaSnapchatGhost,
+} from "react-icons/fa";
+
+
 // ********************************************
 // بيانات التواصل
 // ********************************************
@@ -211,14 +221,14 @@ const contactLinks = [
     title: "الموقع الجغرافي", // تم تغيير النص إلى عنوان رسمي
     href: "https://maps.app.goo.gl/2swqBmpEMwC4ijFB9",
     color: "text-red-600",
-    value: "Al Jazirah, Al-Ruwais, Jeddah 22231",
+    value: "الجزيرة، الرويس، جدة ",
   },
   {
     icon: Phone,
     title: "رقم التواصل (جوال وواتس)",
-    href: "tel:+966553066775",
+    href: "tel:966553066775‬",
     color: "text-teal-700",
-    value: "+966 55 3066775",
+    value: "966553066775‬+",
   },
   {
     icon: Instagram,
@@ -235,26 +245,26 @@ const contactLinks = [
     value: "ccsqmksa",
   },
   {
-    icon: Camera, // لتمثيل Snapchat
+    icon: FaSnapchatGhost, // لتمثيل Snapchat
     title: "حساب سناب شات",
     href: "https://www.snapchat.com/add/ccsqmksa",
     color: "text-yellow-500",
     value: "ccsqmksa",
   },
   {
-    icon: X,
+    icon: FaXTwitter,
     title: "حساب إكس (تويتر)",
-    href: "https://x.com/ccsqmKSA",
+    href: "https://x.com/CCQmajli_sa",
     color: "text-sky-500",
-    value: "ccsqmKSA",
+    value: "CCQmajli_sa",
   },
-  {
-    icon: Facebook,
-    title: "حساب فيسبوك",
-    href: "#",
-    color: "text-blue-600",
-    value: "",
-  },
+  // {
+  //   icon: Facebook,
+  //   title: "حساب فيسبوك",
+  //   href: "#",
+  //   color: "text-blue-600",
+  //   value: "",
+  // },
 ];
 
 // الألوان والخطوط
