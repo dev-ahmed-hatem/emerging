@@ -68,9 +68,11 @@ function Home() {
       {/* <AchievementsSection4/> */}
 
       {/* <FoundingSocietiesSection/> */}
-      <FoundingSocietiesSection2 />
 
-      <LatestNewsSection />
+      {/* till the actual news */}
+      {/* <FoundingSocietiesSection2 /> */}
+      {/* <LatestNewsSection /> */}
+
       <StrategicPlanSection />
       {/* <StrategicPlanSection2/> */}
 
