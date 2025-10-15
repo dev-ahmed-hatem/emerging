@@ -156,11 +156,11 @@ const videoData = [
     description:
       "شاهد هذا المقطع  للتعرف على أهداف ورسالة جائزتنا الناشئة ومجالات المنافسة الرئيسية.",
   },
-  {
-    title: "كلمة المدير العام",
-    src: "/vid2.mp4",
-    description: " كلمة المدير العام لجمعية بشراكم  أ / عبد المجيد محمد السهو ",
-  },
+  // {
+  //   title: "كلمة المدير العام",
+  //   src: "/vid2.mp4",
+  //   description: " كلمة المدير العام لجمعية بشراكم  أ / عبد المجيد محمد السهو ",
+  // },
 ];
 
 // ********************************************
@@ -168,7 +168,7 @@ const videoData = [
 // ********************************************
 const CustomVideoPlayer = ({ src, title, description, index }) => (
   <div
-    className={`bg-white rounded-xl shadow-lg p-4 transition-transform duration-300 hover:shadow-xl`}
+    className={`bg-white rounded-xl shadow-lg p-4 transition-transform duration-300 hover:shadow-xl w-full`}
     dir="rtl"
     style={{ border: `1px solid ${ACCENT_COLOR}` }}
   >
@@ -187,11 +187,11 @@ const CustomVideoPlayer = ({ src, title, description, index }) => (
     </p>
 
     {/* عنصر الفيديو */}
-    <div className="relative w-full overflow-hidden rounded-lg shadow-inner">
+    <div className="relative w-fit overflow-hidden rounded-lg shadow-inner mx-auto">
       <video
         controls
         preload="metadata" // يسمح بتحميل البيانات الوصفية (metadata) فقط لتسريع التحميل
-        className="w-full h-auto max-h-96 object-contain rounded-lg" // object-contain لضمان ظهور الفيديو كاملاً
+        className="w-fit h-auto max-h-96 object-contain rounded-lg" // object-contain لضمان ظهور الفيديو كاملاً
         // يضمن أن يتكيف الفيديو مع حجم حاويته
         style={{ backgroundColor: "#000" }}
       >
@@ -266,7 +266,7 @@ const FeaturedNewsSection = () => {
           {/* ------------------------------------------ */}
           {/* محتوى الفيديو والدليل */}
           {/* ------------------------------------------ */}
-          <div className="grid md:grid-cols-2 gap-8 mt-10">
+          <div className="mt-10 flex justify-center items-center">
             {videoData.map((video, index) => (
               <CustomVideoPlayer
                 key={index}
