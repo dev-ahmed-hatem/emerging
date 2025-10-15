@@ -492,21 +492,7 @@ const FoundingSocietiesSection = () => {
                     </div>
 
                     {/* زر "اعرف أكثر" بعد السلايدر لتوفير رابط لصفحة مفصلة */}
-                    <div className="mt-16 text-center fade-in-up delay-9">
-                        <a 
-                            href="/all-societies" // رابط افتراضي لصفحة الجمعيات الكاملة
-                            className="cta-button inline-flex items-center justify-center 
-                                text-white font-extrabold py-3 px-8 rounded-full shadow-lg 
-                                text-lg tracking-wide hover:shadow-xl transition-all duration-300"
-                        >
-                            {/* أيقونة السهم للأمام */}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 -mt-0.5">
-                                <path d="M5 12h14"></path>
-                                <path d="M12 5l7 7-7 7"></path>
-                            </svg>
-                            الانتقال لصفحة جميع الجمعيات
-                        </a>
-                    </div>
+                    
                 </div>
             </section>
         </>

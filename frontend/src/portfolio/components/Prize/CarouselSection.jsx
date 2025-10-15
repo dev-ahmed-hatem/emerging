@@ -231,7 +231,162 @@
 
 
 
+// import React, { useState, useEffect } from "react";
+
+// // ********************************************
+// // المكوّن الرئيسي: QuranSlideshowSection
+// // ********************************************
+
+// const QuranSlideshowSection = () => {
+//     // الألوان المستخدمة (تم دمجها مباشرة من ألوان الهوية: العنّابي الفيروزي والذهبي المطفأ)
+//     const ACCENT_COLOR = '#d4c291'; // الذهبي المطفأ
+//     const PRIMARY_COLOR = '#057687'; // العنّابي الفيروزي الداكن
+
+//     // مسارات الصور المحدثة (يفترض أنها متوفرة في بيئة المشروع)
+//     const images = [
+//         "/hero1.PNG",
+//         "/hero2.PNG"
+//     ];
+
+//     const [current, setCurrent] = useState(0);
+
+//     // وظيفة التنقل التلقائي كل 5 ثوانٍ
+//     useEffect(() => {
+//         // تأكد من وجود صور قبل بدء المؤقت
+//         if (images.length < 2) return;
+
+//         const timer = setInterval(() => {
+//             setCurrent((prev) => (prev + 1) % images.length);
+//         }, 5000); // 5000 ميلي ثانية = 5 ثوانٍ
+
+//         // تنظيف المؤقت عند إزالة المكوّن
+//         return () => clearInterval(timer);
+//     }, [images.length]);
+
+//     // وظائف التنقل اليدوي
+//     const goToPrevious = () => {
+//         const isFirstSlide = current === 0;
+//         const newIndex = isFirstSlide ? images.length - 1 : current - 1;
+//         setCurrent(newIndex);
+//     };
+
+//     const goToNext = () => {
+//         const isLastSlide = current === images.length - 1;
+//         const newIndex = isLastSlide ? 0 : current + 1;
+//         setCurrent(newIndex);
+//     };
+
+//     // وظيفة التنقل للنقاط (Bullits)
+//     const goToSlide = (index) => {
+//         setCurrent(index);
+//     };
+
+
+//     return (
+//         <section 
+//             className="relative w-full overflow-hidden flex items-center justify-center" 
+//             style={{ 
+//                 // تم تعديل الارتفاع ليأخذ جزءًا من الشاشة (85% من ارتفاع الشاشة)
+//                 height: '80vh', 
+//                 // خلفية فاتحة وفخمة
+//                 backgroundColor: '#f9f6ef', 
+//             }}
+//             dir="rtl" // اتجاه من اليمين لليسار
+//         >
+            
+//             {/* 1. إطار خارجي بلون الهوية الذهبي المطفأ */}
+           
+
+//             {/* 2. حاوية الصور */}
+//             <div className="relative w-[95%] md:w-[90%] h-[90%] rounded-[25px] overflow-hidden shadow-2xl">
+//                 {images.map((img, index) => (
+//                     <img
+//                         key={index}
+//                         src={img}
+//                         alt={`slide-${index}`}
+//                         // استخدام نظام التلاشي/التكبير مع مدة انتقال أطول (2000ms) للحركة الفاخرة
+//                         className={`absolute inset-0 w-full h-full object-cover rounded-[25px] 
+//                                     transition-all duration-[1500ms] ease-in-out 
+//                                     ${index === current ? "opacity-100 scale-100" : "opacity-0 scale-105"}`
+//                         }
+//                         // إضافة معالج أخطاء لسهولة التصحيح إذا لم يتم العثور على الصور
+//                         onError={() => console.error(`Error loading image: ${img}`)}
+//                     />
+//                 ))}
+//             </div>
+
+//             {/* 3. أزرار التنقل (الأسهم) */}
+            
+//             {/* السهم الأيسر (للانتقال للوراء في RTL) */}
+//             <button 
+//                 onClick={goToPrevious} 
+//                 className="absolute top-1/2 right-4 transform -translate-y-1/2 p-3 rounded-full 
+//                            bg-black/30 text-white transition-all duration-300 hover:bg-black/60 
+//                            shadow-xl backdrop-blur-sm z-10 active:scale-95"
+//                 aria-label="الشريحة السابقة"
+//             >
+//                <svg className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+//                     <path fillRule="evenodd" d="M16.28 12.28a.75.75 0 0 0 0-1.06l-7.5-7.5a.75.75 0 0 0-1.06 1.06L14.69 12l-6.97 6.97a.75.75 0 1 0 1.06 1.06l7.5-7.5Z" clipRule="evenodd" />
+//                 </svg>
+//             </button>
+
+//             {/* السهم الأيمن (للانتقال للأمام في RTL) */}
+//             <button 
+//                 onClick={goToNext} 
+//                 className="absolute top-1/2 left-4 transform -translate-y-1/2 p-3 rounded-full 
+//                            bg-black/30 text-white transition-all duration-300 hover:bg-black/60 
+//                            shadow-xl backdrop-blur-sm z-10 active:scale-95"
+//                 aria-label="الشريحة التالية"
+//             >
+                
+//                  <svg className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+//                     <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
+//                 </svg>
+//             </button>
+
+
+//             {/* 4. مؤشرات الصور (النقاط - Bullits) */}
+//             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-6 z-10">
+//                 {images.map((_, index) => (
+//                     <button
+//                         key={index}
+//                         onClick={() => goToSlide(index)} // تم ربط النقرة بالوظيفة الجديدة
+//                         className={`w-3 h-3 rounded-full transition-all duration-500 shadow-md cursor-pointer 
+//                             ${current === index 
+//                                 ? "scale-150 ring-2 ring-offset-2 ring-offset-white" 
+//                                 : "bg-[#ffffff80] hover:bg-[#ffffffaa]"
+//                             }`}
+//                         style={{
+//                             backgroundColor: current === index ? ACCENT_COLOR : undefined,
+//                             ringColor: PRIMARY_COLOR,
+//                         }}
+//                         aria-label={`الانتقال إلى الشريحة ${index + 1}`}
+//                     ></button>
+//                 ))}
+//             </div>
+            
+//             {/* تراكب تظليل خفيف لـ Aesthetic */}
+//             <div className="absolute inset-0 bg-gradient-to-b from-[#00000010] via-transparent to-[#00000010] pointer-events-none"></div>
+
+//         </section>
+//     );
+// };
+
+// export default QuranSlideshowSection;
+
+
+
+//////////-------------------------------------------------------
+
+
+
+
+
+
 import React, { useState, useEffect } from "react";
+// استخدام أيقونات Lucide
+import { ChevronRight, ChevronLeft } from 'lucide-react';
+
 
 // ********************************************
 // المكوّن الرئيسي: QuranSlideshowSection
@@ -286,7 +441,7 @@ const QuranSlideshowSection = () => {
         <section 
             className="relative w-full overflow-hidden flex items-center justify-center" 
             style={{ 
-                // تم تعديل الارتفاع ليأخذ جزءًا من الشاشة (85% من ارتفاع الشاشة)
+                // تم تعديل الارتفاع ليأخذ جزءًا من الشاشة (80% من ارتفاع الشاشة)
                 height: '80vh', 
                 // خلفية فاتحة وفخمة
                 backgroundColor: '#f9f6ef', 
@@ -294,20 +449,20 @@ const QuranSlideshowSection = () => {
             dir="rtl" // اتجاه من اليمين لليسار
         >
             
-            {/* 1. إطار خارجي بلون الهوية الذهبي المطفأ */}
-           
-
-            {/* 2. حاوية الصور */}
-            <div className="relative w-[95%] md:w-[90%] h-[90%] rounded-[25px] overflow-hidden shadow-2xl">
+            {/* 1. حاوية الصور - زيادة المساحة المتاحة للصور */}
+            <div className="relative w-[95%] md:w-[90%] h-[90%] p-4 sm:p-6 rounded-[25px] overflow-hidden shadow-2xl bg-white/50 backdrop-blur-sm">
                 {images.map((img, index) => (
                     <img
                         key={index}
                         src={img}
                         alt={`slide-${index}`}
-                        // استخدام نظام التلاشي/التكبير مع مدة انتقال أطول (2000ms) للحركة الفاخرة
-                        className={`absolute inset-0 w-full h-full object-cover rounded-[25px] 
+                        // ********************************************
+                        // التعديل الحاسم: استخدام object-contain لضمان ظهور الصورة بالكامل
+                        // وتغيير الخلفية إلى بيضاء داخل الحاوية لتوضيح الأطراف
+                        // ********************************************
+                        className={`absolute inset-0 w-full h-full rounded-[20px] 
                                     transition-all duration-[1500ms] ease-in-out 
-                                    ${index === current ? "opacity-100 scale-100" : "opacity-0 scale-105"}`
+                                    ${index === current ? "opacity-100 scale-100 object-contain" : "opacity-0 scale-105 object-contain"}`
                         }
                         // إضافة معالج أخطاء لسهولة التصحيح إذا لم يتم العثور على الصور
                         onError={() => console.error(`Error loading image: ${img}`)}
@@ -315,42 +470,39 @@ const QuranSlideshowSection = () => {
                 ))}
             </div>
 
-            {/* 3. أزرار التنقل (الأسهم) */}
+            {/* 2. أزرار التنقل (الأسهم) */}
             
             {/* السهم الأيسر (للانتقال للوراء في RTL) */}
             <button 
                 onClick={goToPrevious} 
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 p-3 rounded-full 
-                           bg-black/30 text-white transition-all duration-300 hover:bg-black/60 
-                           shadow-xl backdrop-blur-sm z-10 active:scale-95"
+                            bg-black/30 text-white transition-all duration-300 hover:bg-black/60 
+                            shadow-xl backdrop-blur-sm z-10 active:scale-95"
                 aria-label="الشريحة السابقة"
             >
-               <svg className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.28 12.28a.75.75 0 0 0 0-1.06l-7.5-7.5a.75.75 0 0 0-1.06 1.06L14.69 12l-6.97 6.97a.75.75 0 1 0 1.06 1.06l7.5-7.5Z" clipRule="evenodd" />
-                </svg>
+                {/* استخدام أيقونة Lucide لضمان التوافر */}
+                <ChevronRight className="w-8 h-8" /> 
             </button>
 
             {/* السهم الأيمن (للانتقال للأمام في RTL) */}
             <button 
                 onClick={goToNext} 
                 className="absolute top-1/2 left-4 transform -translate-y-1/2 p-3 rounded-full 
-                           bg-black/30 text-white transition-all duration-300 hover:bg-black/60 
-                           shadow-xl backdrop-blur-sm z-10 active:scale-95"
+                            bg-black/30 text-white transition-all duration-300 hover:bg-black/60 
+                            shadow-xl backdrop-blur-sm z-10 active:scale-95"
                 aria-label="الشريحة التالية"
             >
-                
-                 <svg className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                    <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clipRule="evenodd" />
-                </svg>
+                {/* استخدام أيقونة Lucide لضمان التوافر */}
+                <ChevronLeft className="w-8 h-8" />
             </button>
 
 
-            {/* 4. مؤشرات الصور (النقاط - Bullits) */}
+            {/* 3. مؤشرات الصور (النقاط - Bullits) */}
             <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-6 z-10">
                 {images.map((_, index) => (
                     <button
                         key={index}
-                        onClick={() => goToSlide(index)} // تم ربط النقرة بالوظيفة الجديدة
+                        onClick={() => goToSlide(index)} 
                         className={`w-3 h-3 rounded-full transition-all duration-500 shadow-md cursor-pointer 
                             ${current === index 
                                 ? "scale-150 ring-2 ring-offset-2 ring-offset-white" 
@@ -373,3 +525,9 @@ const QuranSlideshowSection = () => {
 };
 
 export default QuranSlideshowSection;
+
+
+
+
+
+

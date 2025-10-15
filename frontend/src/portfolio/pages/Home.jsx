@@ -30,6 +30,8 @@ import QuranPrizeSection3 from "../components/Home/QuranPrizeSection3";
 import QuranPrizeSection4 from "../components/Home/QuranPrizeSection4";
 
 import LatestNewsSection from "../components/Home/LatestNewsSection";
+import FeaturedNewsSection from "../components/Home/FeaturedNewsSection";
+
 import { Outlet, useMatch } from "react-router";
 
 import { ConfigProvider } from "antd";
@@ -68,11 +70,13 @@ function Home() {
       {/* <AchievementsSection4/> */}
 
       {/* <FoundingSocietiesSection/> */}
+      <FoundingSocietiesSection2 />
 
-      {/* till the actual news */}
-      {/* <FoundingSocietiesSection2 /> */}
+
+
+      <FeaturedNewsSection />
+
       {/* <LatestNewsSection /> */}
-
       <StrategicPlanSection />
       {/* <StrategicPlanSection2/> */}
 

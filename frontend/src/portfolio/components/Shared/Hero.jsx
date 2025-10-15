@@ -89,7 +89,7 @@ const HeroSlider = () => {
   return (
     // تم تعديل الارتفاع ليناسب المساحة أسفل شريط التنقل
     <div
-      className="relative w-full h-[calc(100vh-4rem)] md:h-[36rem] overflow-hidden pt-16 md:pt-0"
+      className="relative w-full h-[calc(100vh-4rem)] md:h-[50rem] overflow-hidden pt-16 md:pt-0"
       style={fontStyles}
     >
       {/* ========================================
